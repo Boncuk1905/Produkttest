@@ -1,40 +1,46 @@
 <!DOCTYPE html>
-<html lang="da">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min AI-side</title>
+    <title>Min AI Chat</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        #response { margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px; }
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        #response { margin: 20px; padding: 15px; border: 1px dashed #ccc; }
     </style>
 </head>
 <body>
-    <h1>Spørg AI'en</h1>
-    <input type="text" id="userInput" placeholder="Skriv dit spørgsmål her..." style="width: 70%;">
-    <button onclick="sendToAI()">Send</button>
+    <h1>Spørg AI'en en ting! 🤖</h1>
+    <input type="text" id="userInput" placeholder="Hvad er 2+2?">
+    <button onclick="askAI()">Spørg</button>
     <div id="response"></div>
 
     <script>
-        async function sendToAI() {
+        async function askAI() {
             const input = document.getElementById("userInput").value;
-            const responseElement = document.getElementById("response");
+            const responseDiv = document.getElementById("response");
             
             if (!input) {
-                responseElement.textContent = "Indtast venligst en besked.";
+                responseDiv.textContent = "Skriv noget!";
                 return;
             }
 
-            responseElement.textContent = "Arbejder på det...";
+            responseDiv.textContent = "AI tænker...";
 
-            // Her bruger vi en proxy for at undgå CORS-problemer (se trin 3)
+            // Brug en gratis AI-model fra Hugging Face (uden API-nøgle)
             try {
-                const response = await fetch("https://din-proxy-url.com/api/ai", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt: input })
-                });
+                const response = await fetch(
+                    "https://api-inference.huggingface.co/models/google/gemma-7b",
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ inputs: input }),
+                    }
+                );
                 const data = await response.json();
-                responseElement.textContent = data.reply || "Ingen svar modtaget.";
+                responseDiv.textContent = data[0]?.generated_text || "Ingen svar.";
             } catch (error) {
-                responseElement.textContent = `Fejl: ${error.message}`
+                responseDiv.textContent = "Fejl: Prøv igen senere.";
+            }
+        }
+    </script>
+</body>
+</html>

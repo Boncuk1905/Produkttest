@@ -3,44 +3,19 @@
 <head>
     <title>Min AI Chat</title>
     <style>
-        body { font-family: Arial; text-align: center; margin-top: 50px; }
-        #response { margin: 20px; padding: 15px; border: 1px dashed #ccc; }
+        body { font-family: Arial; text-align: center; margin-top: 20px; }
+        iframe { border: 1px solid #ccc; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <h1>Spørg AI'en en ting! 🤖</h1>
-    <input type="text" id="userInput" placeholder="Hvad er 2+2?">
-    <button onclick="askAI()">Spørg</button>
-    <div id="response"></div>
-
-    <script>
-        async function askAI() {
-            const input = document.getElementById("userInput").value;
-            const responseDiv = document.getElementById("response");
-            
-            if (!input) {
-                responseDiv.textContent = "Skriv noget!";
-                return;
-            }
-
-            responseDiv.textContent = "AI tænker...";
-
-            // Brug en gratis AI-model fra Hugging Face (uden API-nøgle)
-            try {
-                const response = await fetch(
-                    "https://api-inference.huggingface.co/models/google/gemma-7b",
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ inputs: input }),
-                    }
-                );
-                const data = await response.json();
-                responseDiv.textContent = data[0]?.generated_text || "Ingen svar.";
-            } catch (error) {
-                responseDiv.textContent = "Fejl: Prøv igen senere.";
-            }
-        }
-    </script>
+    <h1>Snak med AI'en her! 🤖</h1>
+    <!-- Embed fra en ekstern AI-chat-widget -->
+    <iframe 
+        src="https://chatbotkit.com/widget/iframe/start/chatbotkit-community" 
+        width="90%" 
+        height="500px"
+        frameborder="0"
+    ></iframe>
+    <p>Brug vinduet ovenfor til at chatte med AI.</p>
 </body>
 </html>
